@@ -1,0 +1,593 @@
+<html>
+<head>
+  <title>CareOnWheels</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <script src="jquery.min.js"></script>
+  <script src="bootstrap.min.js"></script>
+
+  <style>
+	ol{
+		list-style:none;
+		padding:0px;
+	}
+
+	.activeElem{
+		background-color:#0e74ea;
+		color:white;
+	}
+
+	.arrow {
+		font-size:45px;
+		color:white;
+		background-color:#0e74ea;
+		position:relative;
+	}
+
+	.arrow:active {
+		transform: translateY(4px);
+	}
+
+	.btn{
+		padding: 18px 24px;
+		width:250px;
+		border: 0 none;
+		font-weight: 700;
+		letter-spacing: 1px;
+		text-transform: uppercase;
+	}
+
+	.btn:focus, .btn:active:focus, .btn.active:focus {
+		outline: 0 none;
+	}
+
+	.btn-primary {
+		background: #33a6cc;
+		color: #ffffff;
+	}
+
+	.btn-primary:hover, .btn-primary:focus, .btn-primary:active, .btn-primary.active, .open > .dropdown-toggle.btn-primary {
+		background: #007299;
+	}
+
+	.btn-primary:active, .btn-primary.active {
+		background: #007299;
+		box-shadow: none;
+	}
+
+	.btn-toggle{
+		float:left;
+		position:absolute;
+		top:calc(50% - 15px);
+		left:10px;
+		color:#fff;
+		background-color: #4d4d4d;
+		border:0px;
+	}
+
+	.container-fluid{
+		padding-left:60px;
+	}
+
+	.data-container {
+		background: white;
+		width: 90px;
+		height: 20px;
+		border: 1px solid #111111;
+		border-radius: 3px;
+		margin-top:10px;
+		text-align:center;
+		font-size:17px;
+	}
+
+	.li-Patients{
+		padding:5px;
+	}
+
+	.li-Patients:hover{
+		color:white;
+		background-color:#666666
+	}
+
+	.margin{
+		margin:15px;
+	}
+
+	.navbar{
+		margin-bottom:0px;
+		background-color:#4d4d4d;
+	}
+
+	.navbar-default .navbar-nav>li>a {
+		color: white;
+	}
+
+	.navbar-default{
+		border:none;
+		border-radius:0px;
+	}
+  .fa-list-alt{
+    font-size: 35px;
+    position:relative;
+    top:0px;
+    left:calc(-50% + 22px);
+    cursor:pointer;
+  }
+
+	.navbar-default .navbar-nav>li>a:focus, .navbar-default .navbar-nav>li>a:hover {
+		color: white;
+		background-color: transparent;
+		background-color: #1a1a1a;
+	}
+
+	.next{
+		width:50%;
+		display:inline-block;
+	}
+
+	.patients{
+		width:100%;
+		height:100%;
+		background-color:#f8f8f8;
+		display:inline-block;
+		float:left;
+	}
+
+	.row {
+		display: block;
+		flex-wrap: wrap;
+		width:100%;
+		margin:0px;
+		height:calc(100% - 50px);
+	}
+
+	.width{
+		width:100%;
+		position:absolute;
+		top:calc(50% - 180px);
+	}
+
+	.btn-sw{
+		float:right;
+		height:50px;
+		width:60px;
+		position:relative;
+		left:15px;
+		border:none;
+		color:white;
+	}
+
+	.btn-tel{
+		float:right;
+		height:50px;
+		width:60px;
+		position:relative;
+		left:15px;
+		border:none;
+		color:white;
+		background-color:transparent;
+	}
+
+	.btn-sw-off{
+		background-color:#cc0000;
+	}
+
+	.btn-sw-on{
+		background-color:#00e600;
+	}
+  .blur {
+filter:blur(20px);
+
+}
+.overlay{
+  position: absolute;
+  width:100%;
+  height:100%;
+  z-index: 2;
+
+
+}
+.exit{
+  float:left;
+  border:0px;
+  background-color: #F8F8F8;
+   outline: none;
+}
+
+	.tel{
+		float:right;
+		position:relative;
+		width:200px;
+		height:40px;
+		top:5px;
+		right:5px;
+	}
+
+	.exclamation-style{
+		color:red;
+		position:absolute;
+		bottom: 84px;
+		left: 170px;
+	}
+  .inp{
+    width:45%;
+
+
+  }
+  .text{
+    width:55%;
+
+  }
+	.exclamation-hide{
+		display:none;
+	}
+  .select_patient{
+    position:relative;
+    background-color: #F8F8F8;
+    border:1px solid grey;
+    top:50%;
+    left:50%;
+    width:35%;
+    height:30%;
+    transform: translate(-50% , -50%);
+
+  }
+
+
+	@media screen and (max-width: 600px) {
+		.row{
+			flex-direction: column;
+
+		}
+		.col-xs-3{
+			width:100%;
+			height:60%;
+		}
+		.col-xs-9{
+			width:100%;
+			padding-bottom:10px;
+		}
+		.width{
+			position:relative;
+			top:0px;
+		}
+	}
+	@media screen and (max-width: 768px){
+		.btn-toggle{
+			top:10px;
+		}
+		.container-fluid{
+			padding-left:10px;
+		}
+		.navbar-header{
+		   padding-left:50px;
+		}
+		.tel{
+			float:left;
+		}
+	}
+</style>
+
+<script>
+	var data = [];
+	var ip=0;
+	var bpm;
+	var tel;
+	var clicked=0;
+	var send_alert=0;
+	var key = "278fc6950e7f4f78354ce81ea8e2099ca65c90e680b78c";
+
+	var patientData = function() {
+		$.get('http://localhost:3000/?key='+key+'&type=5&patient='+ip, function(response){ //se face requestul
+			let data = response.split("*");
+			if(data[0]) $("#myBPM").html(data[0]);
+			if(data[1]) $("#temp").html(data[1] + " " +"C");
+			if(data[2]) $("#umd").html(data[2] + "%");
+			if(data[3]) $("#tempBody").html(data[3] + " " + "C")
+			bpm = data[0];
+			console.log(bpm)
+			if((bpm < 60 || bpm > 100) && clicked == 1){
+				if(send_alert == 0){
+					alert("Pulsul pacientului nu este in paramatrii normali!");
+					send_alert=1;
+					setTimeout(function() {
+						send_alert = 0;
+					}, 30 * 1000);
+				}
+				$("#exclamation").removeClass("exclamation-hide");
+			}else{
+				console.log(bpm);
+				$("#exclamation").addClass("exclamation-hide");
+			}
+		});
+	}
+
+	setInterval(function(){ //sa se repete requestul dupa un interval de timp
+		patientData();
+	}, 5000);
+
+	var forward = function() {
+		$.get('http://localhost:3000/?key='+key+'&type=1&speed=1&patient='+ip);
+	}
+
+	var backward = function() {
+		$.get('http://localhost:3000/?key='+key+'&type=2&speed=1&patient='+ip);
+	}
+
+	var left = function() {
+		$.get('http://localhost:3000/?key='+key+'&type=3&speed=1&patient='+ip);
+	}
+
+	var right = function() {
+		$.get('http://localhost:3000/?key='+key+'&type=4&speed=1&patient='+ip);
+	}
+
+ $(document).ready(function() {
+	patientData();
+    let canDoAction = 1;
+	let btnDoAction = 1;
+
+	setInterval(function(){
+		canDoAction = 1;
+	}, 150);
+
+	$(document).keydown(function(event){
+	   if(canDoAction === 0) return;
+
+	   if(event.keyCode === 87){
+	         canDoAction = 0;
+			 forward();
+	   }
+
+	   if(event.keyCode === 65){
+	         canDoAction = 0;
+			 left();
+	   }
+
+	   if(event.keyCode === 83){
+	         canDoAction = 0;
+			 backward();
+	   }
+
+	   if(event.keyCode === 68){
+	         canDoAction = 0;
+			 right();
+	   }
+	})
+
+
+	var timeout1;
+	$("#btn-forward").click(function(){
+		forward();
+	});
+	$("#btn-forward").mousedown(function(){
+		timeout1 = setInterval(function(){
+			forward();
+		}, 150);
+		return false;
+	});
+	$(document).mouseup(function(){
+		clearInterval(timeout1);
+		return false;
+	});
+
+
+	var timeout2;
+	$("#btn-left").click(function(){
+		left();
+	});
+    $("#btn-left").mousedown(function(){
+		timeout2 = setInterval(function(){
+			left();
+		}, 150);
+		return false;
+	});
+	$(document).mouseup(function(){
+		clearInterval(timeout2);
+		return false;
+	});
+
+
+	var timeout3;
+	$("#btn-backward").click(function(){
+		backward();
+	});
+    $("#btn-backward").mousedown(function(){
+		timeout3 = setInterval(function(){
+			backward();
+		}, 150);
+		return false;
+	});
+	$(document).mouseup(function(){
+		clearInterval(timeout3);
+		return false;
+	});
+
+
+	var timeout4;
+	$("#btn-right").click(function(){
+		right();
+	});
+    $("#btn-right").mousedown(function(){
+		timeout4 = setInterval(function(){
+			right();
+		}, 150);
+		return false;
+	});
+	$(document).mouseup(function(){
+		clearInterval(timeout4);
+		return false;
+	});
+
+
+	var width;
+  var hide = 0;
+	var patients = 1;
+	var smallscreen = 0;
+	setInterval(function(){
+		width = $(window).width();
+		if(width < 600 && patients == 0){
+			$(".col-xs-12").removeClass("next");
+			$(".col-xs-9").removeClass("width");
+		}
+		if(width > 600 && patients == 0){
+			$(".col-xs-12").addClass("next");
+			$(".col-xs-9").addClass("width");
+		}
+
+	}, 150);
+
+	$(".btn-toggle").click(function(){
+		 width = $(window).width();
+		$(".toggle").toggle();
+		if(width > 600){
+			$(".col-xs-12").toggleClass("next");
+			$(".col-xs-9").toggleClass("width");
+		}
+		if(patients == 1){
+			patients = 0;
+		}else{
+			patients = 1;
+		}
+
+	});
+
+	$.get('http://localhost:3000/data?key='+key, function(response){
+		let alarmData = response.split(" ");
+		$("#tel").val(alarmData[0]);
+		tel=alarmData[0];
+		console.log(alarmData);
+		if(alarmData[1] == 1){
+			$(".btn-sw").removeClass("btn-sw-off");
+			$(".btn-sw").addClass("btn-sw-on");
+			$(".btn-sw").html("ON");
+			clicked = 1;
+		}else{
+			$(".btn-sw").removeClass("btn-sw-on");
+			$(".btn-sw").addClass("btn-sw-off");
+			$(".btn-sw").html("OFF");
+			clicked = 0;
+		}
+	});
+
+	$(".btn-tel").click(function(){
+		tel = document.getElementById("tel").value;
+		if(tel.length == 10){
+			$.get('http://localhost:3000/data/?key='+key+'&tel='+ tel +'&sw=' + clicked + '&patient=' + ip);
+			console.log(tel);
+		}else{
+			alert("Formatul numarului nu este bun! Numarul trebuie sa fie de forma 07XXXXXXXX");
+		}
+	});
+
+	$(".btn-sw").click(function(){
+		if(clicked == 1){
+			$(".btn-sw").removeClass("btn-sw-on");
+			$(".btn-sw").addClass("btn-sw-off");
+			$(".btn-sw").html("OFF");
+			clicked = 0;
+		}else{
+			$(".btn-sw").removeClass("btn-sw-off");
+			$(".btn-sw").addClass("btn-sw-on");
+			$(".btn-sw").html("ON");
+			clicked = 1;
+		}
+		$.get('http://localhost:3000/data/?key='+key+'&tel='+ tel +'&sw=' + clicked + '&patient=' + ip);
+	});
+
+  $(".fa-list-alt").click(function(){
+      if(hide == 0){
+      $(".col-xs-12").addClass('hidden');
+      $(".blur-container").addClass('blur');
+      $(".overlay").removeClass('hidden');
+      hide=1;
+    }
+  });
+  $(".exit").click(function(){
+    $(".col-xs-12").removeClass('hidden');
+    $(".blur-container").removeClass('blur');
+    $(".overlay").addClass('hidden');
+    hide=0;
+ });
+ });
+</script>
+
+</head>
+<body style="font-size:24px">
+  <div class="overlay hidden">
+    <div class="select_patient">
+          <button class="exit" type="button">&times;</button>
+          <p class="text">Selectati nr de pacienti:</p>
+          <input class="inp"> </input>
+          <p class="text">Selectati pacienti:</p>
+          <input class="inp"> </input>
+     </div>
+
+  </div>
+<div class="blur-container">
+<nav  class="navbar navbar-default">
+	<div class="container-fluid">
+		<div class="navbar-header">
+			<button class="btn-toggle" title="Afiseaza/Ascunde Pacienti"><i class="fa fa-bars" style="font-size:24px"></i></button>
+			<a style="color:white" class="navbar-brand" href="#">CareOnWheels</a>
+		</div>
+		<ul class="nav navbar-nav">
+			<li class="activeElem"><a href="Home page.html">Acasa</a></li>
+			<li><a href="History.html">Istoric</a></li>
+		</ul>
+		<button class="btn-sw btn-sw-off" title="Pornire/Oprire trimiterea SMS">OFF</button>
+		<button class="btn-tel" title="Salvare numar"><i class="fa fa-plus" style="font-size:24px"></i></button>
+		<input class="tel" placeholder="Nr. de telefon" id="tel"></input>
+   </div>
+</nav>
+
+<div class="row">
+	<div style="padding:0px" class="col-xs-3 toggle">
+		<div style="text-align:center" class="patients">
+      <i class="fa fa-list-alt"></i>
+			<br>
+			<h3>Pacienti: </h3>
+			<br>
+			<ol>
+				<li class="li-Patients activeElem"> <h4>Pacient 1 </h4>  </li>
+				<li class="li-Patients"> <h4>  Pacient 2 </h4 </li>
+				<li class="li-Patients"> <h4> Pacient 3 </h4> </li>
+			</ol>
+		</div>
+	</div>
+
+	<div class="col-xs-9" id="beGone">
+		<div class="col-xs-12 ">
+			<h2 style="text-align:center">Date</h2>
+			<div style="padding-top:30px" class="col-xs-6">
+				<div style="text-align:left;float:right">
+					<h4 class="margin">Temperatura corp:</h4>
+					<h4 class="margin">Puls:</h4>
+					<h4 class="margin">Temperatura:</h4>
+					<h4 class="margin">Umiditate:</h4>
+				</div>
+			</div>
+			<div style="padding-top:30px; padding-left:56px" class="col-xs-6">
+				<div class="data-container margin" id="tempBody"> </div>
+				<div class="data-container margin" id="myBPM"></div>
+				<i class="fa fa-exclamation-triangle exclamation-style" id="exclamation" style="font-size:22px"></i>
+				<div class="data-container margin" id="temp"> </div>
+				<div class="data-container margin" id="umd"> </div>
+			</div>
+		</div>
+		<div style="padding-top:30px;" class="col-xs-12 text-center">
+			<h2 style="text-align:center"> Control</h2>
+			</br>
+			<button id="btn-forward" style="position:relative;left:3px;bottom:3px" <i class="fa fa-arrow-up arrow"></i></button>
+			<br>
+			<button id="btn-left" <i class="fa fa-arrow-left arrow"></i></button>
+			<button id="btn-backward" <i class="fa fa-arrow-down arrow "></i></button>
+			<button id="btn-right" <i class="fa fa-arrow-right arrow"></i></button>
+		</div>
+	</div>
+</div>
+</div>
+</body>
+</html>

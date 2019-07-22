@@ -1,0 +1,446 @@
+<html>
+<head>
+	<title>Istoric</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="chartist.min.css">
+	<script src="chartist.min.js"></script>
+	<link rel="stylesheet" href="bootstrap.min.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<script src="jquery.min.js"></script>
+	<script src="bootstrap.min.js"></script>
+
+<style>
+	ol{
+		list-style:none;
+		padding:0px;
+	}
+
+	textarea{
+		position:relative;
+		left:50%;
+		transform:translate(-50%,0);
+		width:75%;
+		height:75%;
+		border:1px solid black;
+		resize:none;
+		font-size:20px;
+	}
+
+	.activeElem{
+		background-color:#0e74ea;
+		color:white;
+	}
+
+	.btn{
+		padding: 18px 24px;
+		width:250px;
+		border: 0 none;
+		font-weight: 700;
+		letter-spacing: 1px;
+		text-transform: uppercase;
+	}
+
+	.btn:focus, .btn:active:focus, .btn.active:focus {
+		outline: 0 none;
+	}
+
+	.btnGraph {
+		background-color: #2196F3;
+		color: white;
+		padding: 16px;
+		font-size: 16px;
+		border: none;
+		outline: none;
+	}
+
+	.btnGraph:hover, .dropdown:hover .btn {
+		background-color: #0b7dda;
+	}
+
+	.btn-graph:hover .dropdown-content {
+		display: block;
+	}
+
+	.btn-primary {
+		background: #33a6cc;
+		color: #ffffff;
+	}
+
+	.btn-primary:hover, .btn-primary:focus, .btn-primary:active, .btn-primary.active, .open > .dropdown-toggle.btn-primary {
+		background: #007299;
+	}
+
+	.btn-primary:active, .btn-primary.active {
+		background: #007299;
+		box-shadow: none;
+	}
+
+	.btn-toggle{
+		float:left;
+		position:absolute;
+		top:calc(50% - 15px);
+		left:10px;
+		color:#fff;
+		background-color: #4d4d4d;
+		border:0px;
+	}
+
+	.container-fluid{
+		padding-left:60px;
+	}
+
+	.ct-chart{
+		height: 100%;
+		width:100%;
+	}
+
+	.dropdown {
+		position: absolute;
+		display: inline-block;
+	}
+
+	.dropdown-content {
+		display: none;
+		position: absolute;
+		background-color: #f1f1f1;
+		min-width: 115px;
+		z-index: 1;
+		opacity:0.9;
+
+	}
+
+	.dropdown-content a {
+		color: black;
+		padding: 8px 25px;
+		text-decoration: none;
+		display: block;
+	}
+
+	.dropdown-content a:hover {
+		background-color: #ddd
+	}
+
+	.li-Patients{
+		padding:5px;
+	}
+
+	.li-Patients:hover{
+		color:white;
+		background-color:#666666
+	}
+
+	.margin{
+		margin:15px;
+	}
+
+	.navbar{
+		margin-bottom:0px;
+		background-color:#4d4d4d;
+	}
+
+	.navbar-default .navbar-nav>li>a {
+		color: white;
+	}
+
+	.navbar-default{
+		border:none;
+		border-radius:0px;
+	}
+
+	.navbar-default .navbar-nav>li>a:focus, .navbar-default .navbar-nav>li>a:hover {
+		color: white;
+		background-color: transparent;
+		background-color: #1a1a1a;
+	}
+
+	.patients{
+		width:100%;
+		height:100%;
+		background-color:#f8f8f8;
+		display:inline-block;
+		float:left;
+	}
+
+	.row {
+		display: block;
+		flex-wrap: wrap;
+		width:100%;
+		margin:0px;
+		height:calc(100% - 50px);
+	}
+
+	.width{
+		width:100%;
+	}
+
+	.history{
+		height:587px;
+	}
+
+	.btn-sw{
+		float:right;
+		height:50px;
+		width:60px;
+		position:relative;
+		left:15px;
+		border:none;
+		color:white;
+	}
+
+	.btn-tel{
+		float:right;
+		height:50px;
+		width:60px;
+		position:relative;
+		left:15px;
+		border:none;
+		color:white;
+		background-color:transparent;
+	}
+
+	.btn-sw-off{
+		background-color:#cc0000;
+	}
+
+	.btn-sw-on{
+		background-color:#00e600;
+	}
+
+	.tel{
+		float:right;
+		position:relative;
+		width:200px;
+		height:40px;
+		top:5px;
+		right:5px;
+	}
+
+	@media screen and (max-width: 600px) {
+		.row{
+			flex-direction: column;
+		}
+		.col-xs-3{
+			width:100%;
+			height:60%;
+		}
+		.col-xs-9{
+			width:100%;
+			padding-bottom:15px;
+		}
+		.reposition{
+			position:relative;
+
+		}
+		textarea{
+			width:90%;
+		}
+	}
+	@media screen and (max-width: 767px){
+		.btn-toggle{
+			top:10px;
+		}
+		.container-fluid{
+			padding-left:10px;
+		}
+		.navbar-header{
+		   padding-left:50px;
+
+		}
+		.tel{
+			float:left;
+		}
+	}
+
+	@media screen and (max-width: 840px) and (min-width: 768px){
+		.tel{
+			position: absolute;
+			top: 5px;
+			right: 120px;
+			width:150px;
+		}
+	}
+</style>
+<script>
+	var key = "278fc6950e7f4f78354ce81ea8e2099ca65c90e680b78c";
+
+//History
+	$.get('http://localhost:3000/history/?key='+key+'&graph=4', function(response){
+		$('textarea').html(response)
+	})
+var chart = {}
+$(document).ready(function() {
+
+	$(".btn-toggle").click(function(){
+		$(".toggle").toggle();
+		$(".col-xs-9").toggleClass("width");
+		$(".col-xs-9").toggleClass("reposition");
+		chart.update();
+	});
+
+	$(".ct-chart").hide();
+
+	$(".btn-temp").click(function(){
+		$(".history").hide();
+		$(".ct-chart").show();
+	});
+	$(".btn-umd").click(function(){
+		$(".history").hide();
+		$(".ct-chart").show();
+	});
+	$(".btn-myBPM").click(function(){
+		$(".history").hide();
+		$(".ct-chart").show();
+	});
+	$(".btn-tempBody").click(function(){
+		$(".history").hide();
+		$(".ct-chart").show();
+	});
+
+	var lineData = [];
+	var dataElem = [];
+	var elements = [];
+	var i;
+
+	var dataRecieved = function(param){
+		$.get('http://localhost:3000/history/?key='+key+'&graph=' + param, function(response){ //trimitem request si asteptam raspuns cu o variabila pentru diferentiere actiuni
+			let lineData = response.split("\n");
+			for(i=0; i<5; i++){
+				let dataElem = lineData[i].split(" ");
+				elements.push(dataElem[0]);
+				console.log(elements);
+			}
+			console.log(param);
+			chart = new Chartist.Line('.ct-chart', {
+				labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+				series: [
+					[elements[0], elements[1], elements[2], elements[3], elements[4]],
+				]
+			}, {
+				fullWidth: true,
+				chartPadding: {
+					right: 40
+				}
+			});
+			elements = [];
+		})
+	}
+
+	$(".btn-temp").click(function(){
+		dataRecieved(0);
+	});
+	$(".btn-umd").click(function(){
+		dataRecieved(1);
+	});
+	$(".btn-myBPM").click(function(){
+		dataRecieved(2);
+	});
+	$(".btn-tempBody").click(function(){
+		dataRecieved(3);
+	});
+
+	$.get('http://localhost:3000/data?key='+key, function(response){
+		let alarmData = response.split(" ");
+		$("#tel").val(alarmData[0]);
+		tel=alarmData[0];
+		console.log(alarmData);
+		if(alarmData[1] == 1){
+			$(".btn-sw").removeClass("btn-sw-off");
+			$(".btn-sw").addClass("btn-sw-on");
+			$(".btn-sw").html("ON");
+			clicked = 1;
+		}else{
+			$(".btn-sw").removeClass("btn-sw-on");
+			$(".btn-sw").addClass("btn-sw-off");
+			$(".btn-sw").html("OFF");
+			clicked = 0;
+		}
+	});
+
+	var tel;
+	var clicked=0;
+	var ip=0;
+
+	$(".btn-tel").click(function(){
+		tel = document.getElementById("tel").value;
+		if(tel.length == 10){
+			$.get('http://localhost:3000/data/?key='+key+'&tel='+ tel +'&sw=' + clicked + '&patient=' + ip);
+			console.log(tel);
+		}else{
+			alert("Formatul numarului nu este bun! Numarul trebuie sa fie de forma 07XXXXXXXX");
+		}
+
+	});
+
+	$(".btn-sw").click(function(){
+		if(clicked == 1){
+			$(".btn-sw").removeClass("btn-sw-on");
+			$(".btn-sw").addClass("btn-sw-off");
+			$(".btn-sw").html("OFF");
+			clicked = 0;
+		}else{
+			$(".btn-sw").removeClass("btn-sw-off");
+			$(".btn-sw").addClass("btn-sw-on");
+			$(".btn-sw").html("ON");
+			clicked = 1;
+		}
+		$.get('http://localhost:3000/data/?key='+key+'&tel='+ tel +'&sw=' + clicked + '&patient=' + ip);
+	});
+
+});
+</script>
+</head>
+
+<body style="font-size:24px">
+<nav  class="navbar navbar-default">
+	<div class="container-fluid">
+		<div class="navbar-header">
+			<button class="btn-toggle" title="Afiseaza/Ascunde Pacienti"><i class="fa fa-bars" style="font-size:24px"></i></button>
+			<a style="color:white" class="navbar-brand" href="#">CareOnWheels</a>
+		</div>
+		<ul class="nav navbar-nav">
+			<li> <a href="Home page.html">Home</a></li>
+			<li class="activeElem"><a href="History.html">Istoric</a></li>
+			<li class="btn-graph">
+				<a href="#" style="height:50px"> Grafic
+					<i class="fa fa-caret-down"></i>
+				</a>
+				<div class="dropdown-content">
+					<a href="#" class="btn-temp">Temperatura</a>
+					<a href="#" class="btn-umd">Umiditate</a>
+					<a href="#" class="btn-myBPM">Puls</a>
+					<a href="#" class="btn-tempBody">Temperatura corp</a>
+				</div>
+			</li>
+		</ul>
+		<button class="btn-sw btn-sw-off" title="Pornire/Oprire trimiterea SMS">OFF</button>
+		<button class="btn-tel" title="Salvare numar"><i class="fa fa-plus" style="font-size:24px"></i></button>
+		<input class="tel" placeholder="Nr. de telefon" id="tel"></input>
+   </div>
+</nav>
+
+<div class="row">
+	<div style="padding:0px" class="col-xs-3 toggle">
+		<div style="text-align:center" class="patients">
+			<br>
+			<h3>Pacienti: </h3>
+			<br>
+			<ol>
+				<li class="li-Patients activeElem"><h4>	Pacient 1 </h4></li>
+				<li class="li-Patients"><h4> Pacient 2 </h4></li>
+				<li class="li-Patients"><h4> Pacient 3 </h4></li>
+			</ol>
+		</div>
+	</div>
+
+	<div class="col-xs-9 reposition">
+		<div class="history">
+			<h1 style="text-align:center">Istoric</h1>
+			<textarea readonly> </textarea>
+		</div>
+		<div class="ct-chart"></div>
+	</div>
+</div>
+
+</body>
+</html>
